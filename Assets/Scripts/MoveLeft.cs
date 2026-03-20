@@ -3,13 +3,14 @@ using UnityEngine;
 public class MoveLeft : MonoBehaviour
 {
     public float speed = 10f;
-
+    public float fristSpeed = 10f;
     private float leftBound = -15;
 
     private PlayerController playerController;
 
     void Start()
     {
+        speed = fristSpeed;
         playerController = GameObject.Find("Player").GetComponent<PlayerController>();
     }
 
@@ -25,5 +26,21 @@ public class MoveLeft : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+        private void FixedUpdate()
+    {
+        if (playerController.speedAction.IsPressed())
+        {
+            speed = fristSpeed * 2;
+        }
+        else
+        {
+            speed = fristSpeed;
+        }
+
+
+
+
+
     }
 }
