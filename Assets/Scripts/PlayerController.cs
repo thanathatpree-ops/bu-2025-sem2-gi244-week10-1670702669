@@ -14,11 +14,13 @@ public class PlayerController : MonoBehaviour
     private Rigidbody rb;
     private InputAction jumpAction;
     private bool isOnGround = true;
+    public bool onGround = false;
 
     private Animator playerAnim;
     private AudioSource playerAudio;
 
     public bool gameOver = false;
+    private bool canDoubleJump = false;
 
     void Awake()
     {
@@ -40,13 +42,28 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (jumpAction.triggered && isOnGround && !gameOver)
+        if (jumpAction.triggered && gameOver == false)
         {
-            rb.AddForce(jumpForce * Vector3.up, ForceMode.Impulse);
-            isOnGround = false;
-            playerAnim.SetTrigger("Jump_trig");
-            dirtParticle.Stop();
-            playerAudio.PlayOneShot(jumpSfx);
+            
+            if (isOnGround == true)
+            {
+                rb.AddForce(jumpForce * Vector3.up, ForceMode.Impulse);
+                isOnGround = false;
+                canDoubleJump = true; 
+
+                playerAnim.SetTrigger("Jump_trig");
+                dirtParticle.Stop();
+                playerAudio.PlayOneShot(jumpSfx);
+            }
+            
+            else if (canDoubleJump == true)
+            {
+                rb.AddForce(jumpForce * Vector3.up, ForceMode.Impulse);
+                canDoubleJump = false; 
+
+                playerAnim.SetTrigger("Jump_trig");
+                playerAudio.PlayOneShot(jumpSfx);
+            }
         }
     }
 
